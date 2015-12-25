@@ -8,12 +8,17 @@ import java.util.List;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
 import jabara.general.ArgUtil;
-import ${package}.entity.EEmployee;
+import jabara.general.NotFound;
+import jabara.jpa.entity.EntityBase_;
+import jabara.jpa.entity.Id;
+import sandbox.entity.EEmployee;
 
 /**
  *
@@ -48,6 +53,23 @@ public class EmployeeService {
         final CriteriaQuery<EEmployee> query = builder.createQuery(EEmployee.class);
         query.from(EEmployee.class);
         return this.em.createQuery(query).getResultList();
+    }
+
+    /**
+     * @param pId -
+     * @return -
+     * @throws NotFound -
+     */
+    public EEmployee getById(final Id<EEmployee> pId) throws NotFound {
+        final CriteriaBuilder builder = this.em.getCriteriaBuilder();
+        final CriteriaQuery<EEmployee> query = builder.createQuery(EEmployee.class);
+        final Root<EEmployee> root = query.from(EEmployee.class);
+        query.where(builder.equal(root.get(EntityBase_.id), pId.getValueAsObject()));
+        try {
+            return this.em.createQuery(query).getSingleResult();
+        } catch (@SuppressWarnings("unused") final NoResultException e) {
+            throw NotFound.GLOBAL;
+        }
     }
 
     /**

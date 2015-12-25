@@ -1,7 +1,7 @@
 /**
  *
  */
-package ${package}.javaee.cdi.provider;
+package ${package}.javaee.cdi;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Produces;

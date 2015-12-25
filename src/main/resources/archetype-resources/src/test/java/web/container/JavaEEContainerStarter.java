@@ -49,6 +49,8 @@ public final class JavaEEContainerStarter {
         final int HTTPS_PORT = 8082;
         final int COMMAND_PORT = 10001;
 
+        System.setProperty("java.awt.headless", Boolean.toString(true)); // ヘッドレスにしないとMacにおいてアイコンが起動して面倒
+
         sendStopCommand(COMMAND_PORT); // 既に起動しているプロセスがあれば停止する.
 
         final GlassFishProperties properties = new GlassFishProperties();
